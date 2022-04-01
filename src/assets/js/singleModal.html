@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>单例modal</title>
+  <style>
+    .modal {
+      width: 200px;
+      height: 200px;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      border: solid 1px #000;
+    }
+  </style>
+</head>
+<body>
+  <div>
+    <button id="open">打开</button>
+    <button id="close">关闭</button>
+  </div>
+</body>
+<script>
+  // const Modal = (function() {
+  //   let modal = null;
+  //   return function() {
+  //     if(!modal) {
+  //       modal = document.createElement('div')
+  //       modal.innerHTML = '弹窗'
+  //       modal.classList.add('modal')
+  //       modal.style.display = 'none'
+  //       document.body.appendChild(modal)
+  //     }
+  //     return modal;
+  //   }
+  // })()
+  class Modal {
+    static getModal() {
+      if(!Modal.modal) {
+        let modal = document.createElement('div')
+        modal.innerHTML = '弹窗'
+        modal.classList.add('modal')
+        modal.style.display = 'none'
+        document.body.appendChild(modal)
+        Modal.modal = modal;
+      }
+      return Modal.modal;
+    }
+  }
+
+
+  document.querySelector('#open').addEventListener('click',(e)=>{
+    const modal =Modal.getModal()
+    // const modal = new Modal()
+    modal.style.display = 'block'
+  })
+  document.querySelector('#close').addEventListener('click',(e)=>{
+    // const modal = new Modal()
+    const modal =Modal.getModal()
+    modal.style.display = 'none'
+  })
+</script>
+</html>

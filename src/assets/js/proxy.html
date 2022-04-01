@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div class="parent">
+    <div class="child">1</div>
+    <div class="child">2</div>
+    <div class="child">3</div>
+    <div class="child">4</div>
+  </div>
+</body>
+<script>
+  const gril = {
+    name:'xx',
+    age:12,
+    careet:'aa',
+    avatar:'333',
+    phone:12344,
+  }
+  const baseInfo = ['name','age'];
+  const praviteInfo = ['avatar','phone'];
+  const user = {
+    isValidated:false,
+    isVIP:false,
+  }
+  const intermediary = new Proxy(gril,{
+    get(gril,key) {
+      if(!user.isValidated) {
+        return console.log('no')
+      } else if(!user.isVIP&&praviteInfo.includes(key)) {
+        return console.log('VIP')
+      } else {
+        return gril[key];
+      }
+    }
+  })
+  console.log(gril.name)
+  class PreloadImg {
+    constructor(node) {
+      this.imgNode = node;
+    }
+    setStr(imgurl) {
+      this.imgNode.src = imgurl;
+    }
+  }
+  class ProxyImg {
+    static LOAD_IMG ='xxx'
+    constructor(targetImage) {
+      this.targetImage = targetImage;
+    }
+    setSrc(targetUrl) {
+      this.targetImage.setSrc(ProxyImg.LOAD_IMG)
+      const virtualImage = new Image();
+      virtualImage.onload = ()=>{
+        this.targetImage.setSrc(targetUrl)
+      }
+      virtualImage.src = targetUrl;
+    }
+  }
+
+</script>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>prototype</title>
+</head>
+<body>
+  
+</body>
+<script>
+  function User(name,age) {
+    this.name = name;
+    this.age = age;
+  }
+  function Base() {
+
+  }
+  User.prototype = new Base()
+  console.log(User.prototype) //Object
+  console.log(User.prototype.prototype) //Object
+</script>
+</html>

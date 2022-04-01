@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  
+</body>
+<script>
+  /**
+   * es6 class 静态方法获取
+   * 闭包
+  */
+/*  class Strozge {
+    static getInstance() {
+      if(!Strozge.instance) {
+        Strozge.instance = new Strozge()
+      }
+      return Strozge.instance;
+    }
+    getItem(key) {
+      return localStorage.getItem(key)
+    }
+    setItem(key,value) {
+      return localStorage.setItem(key,value)
+    }
+  }
+const stroage1 = Strozge.getInstance()
+const stroage2 = Strozge.getInstance()
+stroage1.setItem('name','kkk')
+console.log(stroage1.getItem('name'))
+console.log(stroage2.getItem('name'))
+*/
+function StorageBase(){}
+StorageBase.prototype.getItem = function(key) {
+  return localStorage.getItem(key)
+}
+StorageBase.prototype.setItem = (key,value) => {
+  return localStorage.setItem(key,value)
+}
+const Storage =(function(){
+  let instance = null;
+  return function() {
+    if(!instance) {
+      instance = new StorageBase()
+    }
+    return instance;
+  }
+})()
+const storage1 = new Storage()
+const storage2 = new Storage()
+storage1.setItem('key','444')
+console.log(storage1.getItem('key'))
+console.log(storage2.getItem('key'))
+</script>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <div>{{name}}</div>
+    <div class="message">{{message}}</div>
+    <input type="text" v-model="message">
+  </div>
+</body>
+<script>
+  class Vue extends EventTarget {
+    constructor(option) {
+      super();
+      this.option = option;
+      this._data = this.option.data;
+      this.el = document.querySelector(this.option.el)
+      this.observe(this._data);
+      this.compileNode(this.el);
+    }
+    observe(data) {
+      const context = this;
+      this._data = new Proxy(data,{
+        set(target,prop,newValue) {
+          let event = new CustomEvent(prop,{
+            detail:newValue
+          })
+          context.dispatchEvent(event)
+          return Reflect.set(...arguments)
+        }
+      })
+    }
+    compileNode(el) {
+      let child = el.childNodes;
+      console.log(el)
+      let childArr = [...child];
+      childArr.forEach(node => {
+        if(node.nodeType===3) {
+          // 文字属性
+          let text = node.textContent;
+          let reg = /\{\{\s*([^\s\{\}]+)\s*\}\}/g
+          if(reg.test(text)) {
+            let $1 = RegExp.$1;
+            // this._data[$1] && (node.textContent)
+            if(this._data[$1]) {
+              node.textContent = text.replace(reg,this._data[$1])
+            }
+            this.addEventListener($1,e=>{
+              node.textContent = text.replace(reg,e.detail)
+            })
+          }
+        } else if(node.nodeType==1) {
+          let attr = node.attributes;
+          if(attr.hasOwnProperty('v-model')) {
+            let keyName = attr['v-model'].nodeValue;
+            node.value = this._data[keyName];
+            node.addEventListener('input',e=>{
+              this._data[keyName] = node.value;
+            })
+          }
+          this.compileNode(node)
+        }
+      })
+    }
+  }
+  let data = {
+    name:'12',
+    height:'444'
+  }
+  let vm = new Vue({
+    el:'#app',
+    data:{
+      name: 'YoLinDeng',
+      message: '打篮球',
+      test: '双向绑定数据'
+    }
+  })
+</script>
+</html>
